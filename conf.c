@@ -62,6 +62,7 @@ struct wavemon_conf conf = {
 
 	.check_geometry		= false,
 	.cisco_mac		= false,
+	.aggregate_ssids	= false,
 	.override_bounds	= false,
 	.random			= false,
 
@@ -321,6 +322,14 @@ static void init_conf_items(void)
 	item->cfname	= strdup("cisco_mac");
 	item->type	= t_list;
 	item->v.i	= &conf.cisco_mac;
+	item->list	= on_off_names;
+	ll_push(conf_items, "*", item);
+
+	item = calloc(1, sizeof(*item));
+	item->name	= strdup("Show only distinct ESSIDs");
+	item->cfname	= strdup("aggregate_ssids");
+	item->type	= t_list;
+	item->v.i	= &conf.aggregate_ssids;
 	item->list	= on_off_names;
 	ll_push(conf_items, "*", item);
 

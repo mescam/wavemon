@@ -135,6 +135,7 @@ extern struct wavemon_conf {
 	/* Boolean values */
 	int	check_geometry,		/* ensure window is large enough */
 		cisco_mac,		/* Cisco-style MAC addresses */
+		aggregate_ssids,	/* show only unique SSIDs */
 		random,			/* random signals */
 		override_bounds,	/* override autodetection */
 		scan_sort_asc;		/* direction of @scan_sort_order */

@@ -69,6 +69,18 @@ static void fmt_scan_entry(struct scan_entry *cur, char buf[], size_t buflen)
 				 format_enc_capab(cur->flags, "/"));
 }
 
+char is_distinct(struct scan_entry *head, struct scan_entry *cur)
+{
+	if (!str_is_ascii(cur->essid))
+		return 1;
+
+	for (; head != cur; head = head->next)
+		if (str_is_ascii(head->essid) && strcmp(cur->essid, head->essid) == 0)
+			return 0;
+
+	return 1;
+}
+
 static void display_aplist(WINDOW *w_aplst)
 {
 	char s[IW_ESSID_MAX_SIZE << 3];
@@ -97,7 +109,7 @@ static void display_aplist(WINDOW *w_aplst)
 	sort_scan_list(&sr.head);
 
 	/* Truncate overly long access point lists to match screen height. */
-	for (cur = sr.head; cur && line < MAXYLEN; line++, cur = cur->next) {
+	for (cur = sr.head; cur && line < MAXYLEN && (!conf.aggregate_ssids || is_distinct(sr.head, cur)); line++, cur = cur->next) {
 		col = CP_SCAN_NON_AP;
 
 		if (cur->mode == IW_MODE_MASTER)
