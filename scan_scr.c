@@ -109,8 +109,13 @@ static void display_aplist(WINDOW *w_aplst)
 	sort_scan_list(&sr.head);
 
 	/* Truncate overly long access point lists to match screen height. */
-	for (cur = sr.head; cur && line < MAXYLEN && (!conf.aggregate_ssids || is_distinct(sr.head, cur)); line++, cur = cur->next) {
-		col = CP_SCAN_NON_AP;
+	for (cur = sr.head; cur && line < MAXYLEN; line++, cur = cur->next) {
+		if (conf.aggregate_ssids && !is_distinct(sr.head, cur)) {
+			line--;
+			continue;
+		}
+
+        	col = CP_SCAN_NON_AP;
 
 		if (cur->mode == IW_MODE_MASTER)
 			col = cur->has_key ? CP_SCAN_CRYPT : CP_SCAN_UNENC;
